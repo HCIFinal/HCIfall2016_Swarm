@@ -24,6 +24,9 @@ class Button{
   
   public void render(){
     fill(100);
+    if(mousePressed && !isMouseOver()){
+      pressed = true;
+    }
     if(isMouseOver()){
       fill(75);
       if(mousePressed){

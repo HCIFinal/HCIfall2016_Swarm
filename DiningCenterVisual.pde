@@ -2,17 +2,19 @@
 public color bgColor = color(0, 255);
 public String[] dcNames = {"Residence", "Union", "West"};
 public color[] dcColors = {color(0,255,255), color(255,0,255), color(255,255,0)};
-public int peoplePerNode = 5;
+public int peoplePerNode = 2;
 
 private DiningCenter[] dc = new DiningCenter[3];
 private ArrayList<Node>[] nodes = new ArrayList[3];
 private Time time = new Time();
 private int lastIndex = -1;
 private float[][] data = new float[3][24*60/time.minutesPerIndex];
+private boolean showNumbers = true;
 
 private Button pauseButton;
 private Button speedButton;
-private Slider timeSlider;
+
+PImage play;
 
 void setup(){
   size(900,900);
@@ -32,7 +34,7 @@ void setup(){
   //create the three dining center objects
   for(int i=0;i<dc.length;i++){
     float t = (float) i / dc.length * TWO_PI;
-    dc[i] = new DiningCenter(dcNames[i], width/2 + cos(t) * width/4, height/2 - sin(t) * (height-time.timeTextSize)/4 + time.timeTextSize/2, dcColors[i]);
+    dc[i] = new DiningCenter(dcNames[i], width/2 + cos(t) * width/4, height/2 - sin(t) * (height-time.timeTextSize)/4 + time.timeTextSize, dcColors[i]);
   }
   
   //create node array lists for future population
@@ -40,17 +42,9 @@ void setup(){
     nodes[i] = new ArrayList<Node>();
   }
   
-  ////populate random nodes within each arraylist
-  //for(int i=0;i<nodes.length;i++){
-  //  for(int j=0;j<100;j++){
-  //    Node n = new Node(random(width), random(height));
-  //    nodes[i].add(n);
-  //    n.setTarget(dc[i].loc);
-  //    n.nodeColor = dc[i].dcOutlineColor;
-  //  }
-  //}
-  
   setupControls();
+  
+  play = loadImage("play.png");
 }
 
 void draw(){
@@ -62,12 +56,15 @@ void draw(){
   
   //update and render each dining center
   for(int i=0;i<dc.length;i++){
-    dc[i].update();
+    if(showNumbers){
+      dc[i].setName(dcNames[i] + "\n" + (int)(data[i][time.index()]) + " People");
+    }
     dc[i].render();
   }
   //update and render each node
   for(int i=0;i<nodes.length;i++){
     for(Node n : nodes[i]){
+      //if(!time.isPaused())
       n.update();
       n.render();
     }
@@ -85,17 +82,18 @@ void draw(){
   
   pauseButton.render();
   speedButton.render();
-  timeSlider.update();
-  timeSlider.render();
+  
 }
 
 void balanceArrays(float l1, float l2, float l3){
   //calcualte target balance percentages
-  int t = (int)(l1 + l2 + l3);
-  int neededNodes = (int) t / peoplePerNode;
-  int[] target = {(int)(l1 / t * neededNodes), 
-        (int)(l2 / t * neededNodes),
-        (int)(l3 / t * neededNodes)};
+  //float t = (l1 + l2 + l3);
+  //int neededNodes = (int) t / peoplePerNode;
+  //println(neededNodes);
+  int[] target = {(int)(l1 / peoplePerNode ), 
+        (int)(l2 / peoplePerNode ),
+        (int)(l3 / peoplePerNode )};
+  println(target[0] + " " + target[1] + " " + target[2]);
   //for each (potentially) unballanced array
   for(int i=0;i<3;i++){
     if(nodes[i].size() > target[i]){
@@ -153,7 +151,7 @@ void mousePressed(){
 }
 
 void setupControls(){
-  pauseButton = new Button(470,10,120,50, "Pause", new Action(){
+  pauseButton = new Button(width-120-10,10,120,50, "Pause", new Action(){
   
     public void execute(){
       if(time.isPaused()){
@@ -166,10 +164,9 @@ void setupControls(){
       }
     }
   });
-  speedButton = new Button(470,70,120,50,"1x", new Action(){
+  speedButton = new Button(width-120-10,70,120,50,"1x", new Action(){
     public void execute(){
       speedButton.setText(time.nextSpeed());
     }
   });
-  timeSlider = new Slider(10,100,200,null);
 }

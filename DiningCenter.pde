@@ -13,6 +13,10 @@ class DiningCenter{
     this.dcFontColor = c;
     this.dcOutlineColor = c;
   }
+  
+  public void setName(String name){
+    this.name = name;
+  }
     
   public void setLocation(PVector loc){
     this.loc = loc;
@@ -30,9 +34,10 @@ class DiningCenter{
     fill(dcFontColor);
     textSize(dcFontSize);
     rectMode(CENTER);
-    textAlign(CENTER, TOP);
-    text(name, loc.x, loc.y, dcDiameter - dcFontSize, dcDiameter - dcFontSize);
+    textAlign(CENTER, BOTTOM);
+    text(name, loc.x, loc.y - dcDiameter - dcFontSize, dcDiameter - dcFontSize, dcDiameter - dcFontSize);
     noFill();
+    strokeWeight(1);
     stroke(dcOutlineColor);
     ellipse(loc.x, loc.y, dcDiameter, dcDiameter);
     ellipse(loc.x, loc.y, dcDiameter+8, dcDiameter+8);

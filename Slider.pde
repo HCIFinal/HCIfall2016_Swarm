@@ -11,6 +11,7 @@ class Slider{
   private float position;
   
   private Action action;
+  private boolean isHeld = false;
   
   public Slider(int x, int y, int w, Action a){
     this.x = x;
@@ -21,7 +22,16 @@ class Slider{
   
   public void update(){
     if(isMouseOver() && mousePressed){
-      position = mouseToPosition(mouseX);
+      isHeld = true;
+    }
+    if(!mousePressed){
+      isHeld = false;
+    }
+    if(isHeld){
+      //print("B: " + position);
+      position = constrain(mouseToPosition(mouseX),0,1);
+      action.execute();
+      //println("\tA: " + position);
     }
   }
   
@@ -30,21 +40,29 @@ class Slider{
     stroke(150);
     line(x, y, x+w, y);
     
-    strokeWeight(1);
+    noStroke();
     fill(175);
     if(isMouseOver()){
       fill(200);
     }
     rectMode(CENTER);
-    rect(x + getValueX(), y, handleWidth, handleHeight);
+    rect(getValueX(), y, handleWidth, handleHeight);
+  }
+  
+  public void setPosition(float pos){
+    this.position = pos;
+  }
+  
+  public float getPosition(){
+    return position;
   }
   
   public int getValueX(){
     return (int)map(position, 0, 1, x, x+w);
   }
   
-  public int mouseToPosition(int x){
-    return (int)map(x, x, x+w, 0, 1);
+  public float mouseToPosition(int mousex){
+    return map(mousex, x, x+w, 0, 1);
   }
   
   public boolean isMouseOver(){

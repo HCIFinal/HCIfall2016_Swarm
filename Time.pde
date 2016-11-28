@@ -1,15 +1,31 @@
 class Time{
-  public int minHour = 6;
+  public int minHour = 7;
   public int maxHour = 24;
   public int framesPerTick = 15;
   public int minutesPerIndex = 15;
   public int timeTextSize = 76;
   public color timeColor = color(255,255,255);
+  public int textWidth;
   
   private int hour = minHour;
   private int minute = 0;
   private int lastTick = 0;
   private boolean paused = false;
+  
+  private Slider timeSlider;
+  
+  public Time(){
+    timeSlider = new Slider(10,130,350,new Action(){
+      public void execute(){
+        float pos = timeSlider.getPosition();
+        int min = minHour * 60;
+        int max = maxHour * 60 - 1;
+        int newTime = (int)map(pos, 0, 1, min, max);
+        hour = newTime / 60;
+        minute = newTime % 60;
+      }
+    });
+  }
   
   public void pause(){
     paused = true;
@@ -52,6 +68,7 @@ class Time{
     if(!paused && frameCount-lastTick>framesPerTick){
       tick();
     }
+    timeSlider.update();
   }
   
   private void tick(){
@@ -64,6 +81,13 @@ class Time{
     if(hour >= maxHour){
       hour = minHour;
     }
+    
+    //move the slider
+    int min = minHour * 60;
+    int max = maxHour * 60 - 1;
+    int time = hour * 60 + minute;
+    float newPos = map(time, min, max, 0, 1);
+    timeSlider.setPosition(newPos);
   }
   
   public void render(){
@@ -72,9 +96,11 @@ class Time{
     fill(0);
     noStroke();
     rectMode(CORNER);
-    rect(10, 10, textWidth(format()), timeTextSize);
+    rect(0, 10, textWidth(format()) + 10, timeTextSize + 60);
     fill(timeColor);
     text(format(),10,10);
+    
+    timeSlider.render();
   }
   
   public int index(){
