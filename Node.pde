@@ -1,11 +1,11 @@
 class Node{
   public float nodeDiameter = 5;
-  public color nodeColor = color(0,0,255);
   public float maxAcceleration = .15;
   public float maxSpeed = 5;
   public float maxRepel = 1;
-  
+
   private PVector loc, vel, acc, target;
+  private color nodeColor = color(0,0,255);
   
   public Node(float x, float y){
     this.loc = new PVector(x, y);

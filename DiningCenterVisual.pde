@@ -1,6 +1,7 @@
+//---visual settings----
 public color bgColor = color(0, 255);
 public String[] dcNames = {"Residence", "Union", "West"};
-public color[] dcColors = {color(0,255,255), color(255,0,255), color(255,255,0)};
+public color[] dcColors = {color(255,255,255), color(255,0,255), color(255,255,0)};
 public int peoplePerNode = 5;
 
 private DiningCenter[] dc = new DiningCenter[3];
@@ -9,8 +10,10 @@ private Time time = new Time();
 private int lastIndex = -1;
 private float[][] data = new float[3][24*60/time.minutesPerIndex];
 
+private Button pauseButton;
+
 void setup(){
-  size(980, 980);
+  size(600,600);
   //read text file for daily data
   String[] lines = loadStrings("times.txt");
   for(int j=0;j<lines.length;j++){
@@ -27,7 +30,7 @@ void setup(){
   //create the three dining center objects
   for(int i=0;i<dc.length;i++){
     float t = (float) i / dc.length * TWO_PI;
-    dc[i] = new DiningCenter(dcNames[i], width/2 + cos(t) * width/3, height/2 - sin(t) * height/3 + time.timeTextSize, dcColors[i]);
+    dc[i] = new DiningCenter(dcNames[i], width/2 + cos(t) * width/4, height/2 - sin(t) * (height-time.timeTextSize)/4 + time.timeTextSize/2, dcColors[i]);
   }
   
   //create node array lists for future population
@@ -35,16 +38,17 @@ void setup(){
     nodes[i] = new ArrayList<Node>();
   }
   
-  //populate random nodes within each arraylist
-  for(int i=0;i<nodes.length;i++){
-    for(int j=0;j<100;j++){
-      Node n = new Node(random(width), random(height));
-      nodes[i].add(n);
-      n.setTarget(dc[i].loc);
-      n.nodeColor = dc[i].dcOutlineColor;
-    }
-  }
+  ////populate random nodes within each arraylist
+  //for(int i=0;i<nodes.length;i++){
+  //  for(int j=0;j<100;j++){
+  //    Node n = new Node(random(width), random(height));
+  //    nodes[i].add(n);
+  //    n.setTarget(dc[i].loc);
+  //    n.nodeColor = dc[i].dcOutlineColor;
+  //  }
+  //}
   
+  setupControls();
 }
 
 void draw(){
@@ -77,10 +81,9 @@ void draw(){
     lastIndex = index;
   }
   
+  pauseButton.render();
 }
 
-//TODO: Find a way to handle when they are not that busy/extremely busy
-//maybe add more nodes or delete them?
 void balanceArrays(float l1, float l2, float l3){
   //calcualte target balance percentages
   int t = (int)(l1 + l2 + l3);
@@ -93,6 +96,7 @@ void balanceArrays(float l1, float l2, float l3){
     if(nodes[i].size() > target[i]){
       //we have too many nodes, try to move them.
       boolean moved = false;
+      //search for a target dining center
       for(int j=0;j<3;j++){
         if(i==j) continue;
         while(nodes[i].size() > target[i] && nodes[j].size() < target[j]){
@@ -127,7 +131,7 @@ void balanceArrays(float l1, float l2, float l3){
   }
 }
 
-//if mouse is pressed, crudly reassign the nodes to other dining centers
+//if mouse is pressed, crudely reassign the nodes to other dining centers
 void mousePressed(){
   //read text file for daily data
   String[] lines = loadStrings("times.txt");
@@ -141,4 +145,19 @@ void mousePressed(){
       data[i][j-1] = Float.parseFloat(numbers[i]);
     }
   }
+}
+
+void setupControls(){
+  pauseButton = new Button(470,10,120,50, "Pause", new Action(){
+    public void execute(){
+      if(time.isPaused()){
+        pauseButton.setText("Pause");
+        time.resume();
+      }
+      else{
+        pauseButton.setText("Play");
+        time.pause();
+      }
+    }
+  });
 }

@@ -1,22 +1,35 @@
 class Time{
   public int minHour = 6;
   public int maxHour = 24;
-  public int framesPerTick = 5;
+  public int framesPerTick = 1;
   public int minutesPerIndex = 15;
   public int timeTextSize = 76;
-  public color timeColor = color(255);
+  public color timeColor = color(255,255,255);
   
   private int hour = minHour;
   private int minute = 0;
   private int lastTick = 0;
+  private boolean paused = false;
+  
+  public void pause(){
+    paused = true;
+  }
+  
+  public void resume(){
+    paused = false;
+  }
+  
+  public boolean isPaused(){
+    return paused;
+  }
   
   public void update(){
-    if(frameCount-lastTick>framesPerTick){
+    if(!paused && frameCount-lastTick>framesPerTick){
       tick();
     }
   }
   
-  public void tick(){
+  private void tick(){
     lastTick = frameCount;
     minute++;
     if(minute >= 60){
