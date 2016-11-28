@@ -1,7 +1,7 @@
 class Time{
   public int minHour = 6;
   public int maxHour = 24;
-  public int framesPerTick = 1;
+  public int framesPerTick = 15;
   public int minutesPerIndex = 15;
   public int timeTextSize = 76;
   public color timeColor = color(255,255,255);
@@ -17,6 +17,31 @@ class Time{
   
   public void resume(){
     paused = false;
+  }
+  
+  public String nextSpeed(){
+   if(framesPerTick==15){
+   speed2x();
+   return "2x";
+   }
+   else if (framesPerTick==7){
+    speed4x(); 
+    return"4x";
+   }
+   else{
+    speed1x(); 
+    return"1x";
+   }
+  }
+  
+  public void speed1x(){
+    framesPerTick = 15;
+  }
+  public void speed2x(){
+    framesPerTick = 7;
+  }
+  public void speed4x(){
+    framesPerTick = 4;
   }
   
   public boolean isPaused(){

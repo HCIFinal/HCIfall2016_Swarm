@@ -1,7 +1,7 @@
 //---visual settings----
 public color bgColor = color(0, 255);
 public String[] dcNames = {"Residence", "Union", "West"};
-public color[] dcColors = {color(255,255,255), color(255,0,255), color(255,255,0)};
+public color[] dcColors = {color(0,255,255), color(255,0,255), color(255,255,0)};
 public int peoplePerNode = 5;
 
 private DiningCenter[] dc = new DiningCenter[3];
@@ -11,9 +11,11 @@ private int lastIndex = -1;
 private float[][] data = new float[3][24*60/time.minutesPerIndex];
 
 private Button pauseButton;
+private Button speedButton;
+private Slider timeSlider;
 
 void setup(){
-  size(600,600);
+  size(900,900);
   //read text file for daily data
   String[] lines = loadStrings("times.txt");
   for(int j=0;j<lines.length;j++){
@@ -82,6 +84,9 @@ void draw(){
   }
   
   pauseButton.render();
+  speedButton.render();
+  timeSlider.update();
+  timeSlider.render();
 }
 
 void balanceArrays(float l1, float l2, float l3){
@@ -149,6 +154,7 @@ void mousePressed(){
 
 void setupControls(){
   pauseButton = new Button(470,10,120,50, "Pause", new Action(){
+  
     public void execute(){
       if(time.isPaused()){
         pauseButton.setText("Pause");
@@ -160,4 +166,10 @@ void setupControls(){
       }
     }
   });
+  speedButton = new Button(470,70,120,50,"1x", new Action(){
+    public void execute(){
+      speedButton.setText(time.nextSpeed());
+    }
+  });
+  timeSlider = new Slider(10,100,200,null);
 }
