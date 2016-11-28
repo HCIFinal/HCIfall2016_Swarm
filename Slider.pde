@@ -3,7 +3,7 @@ class Slider{
   public int sTextSize = 32;
   public int sThickness = 3;
   public int w = 100;
-  public int handleWidth = 10;
+  public int handleWidth = 35;
   public int handleHeight = 20;
   
   private int x, y;
@@ -37,16 +37,27 @@ class Slider{
   
   public void render(){
     strokeWeight(sThickness);
-    stroke(150);
+    stroke(100);
     line(x, y, x+w, y);
     
     noStroke();
-    fill(175);
+    fill(100);
     if(isMouseOver()){
-      fill(200);
+      fill(75);
+    }
+    if(isHeld){
+      fill(125);
     }
     rectMode(CENTER);
     rect(getValueX(), y, handleWidth, handleHeight);
+    strokeWeight(1);
+    stroke(150);
+    for(int i=0;i<3;i++){
+      int _x = i*3;
+      int _yt = y - handleHeight/2 + 2;
+      int _yb = y + handleHeight/2 - 2;
+      line(getValueX() - 3 + _x, _yt, getValueX() - 3 + _x, _yb); 
+    }
   }
   
   public void setPosition(float pos){

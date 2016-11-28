@@ -94,9 +94,10 @@ class Time{
     textSize(timeTextSize);
     textAlign(LEFT, TOP);
     fill(0);
+    
     noStroke();
     rectMode(CORNER);
-    rect(0, 10, textWidth(format()) + 10, timeTextSize + 60);
+    rect(5, 5, textWidth(format()) + 10, timeTextSize + 60);
     fill(timeColor);
     text(format(),10,10);
     

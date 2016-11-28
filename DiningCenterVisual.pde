@@ -14,7 +14,8 @@ private boolean showNumbers = true;
 private Button pauseButton;
 private Button speedButton;
 
-PImage play;
+boolean easterEgg = false;
+float r = 0;
 
 void setup(){
   size(900,900);
@@ -44,12 +45,23 @@ void setup(){
   
   setupControls();
   
-  play = loadImage("play.png");
 }
 
 void draw(){
   //draw the background slightly opaque
   fill(0, 30);
+  
+  if(easterEgg){
+    translate(width/2, height/2);
+    rotate( r += .05);
+    translate(-width/2, -height/2);
+    fill(0, 255);
+    if(r > TWO_PI){
+      r = 0;
+      easterEgg = false;
+    }
+  }
+  
   noStroke();
   rectMode(CORNER);
   rect(0, 0, width, height);
@@ -82,7 +94,6 @@ void draw(){
   
   pauseButton.render();
   speedButton.render();
-  
 }
 
 void balanceArrays(float l1, float l2, float l3){
@@ -99,19 +110,6 @@ void balanceArrays(float l1, float l2, float l3){
     if(nodes[i].size() > target[i]){
       //we have too many nodes, try to move them.
       boolean moved = false;
-      //search for a target dining center
-      for(int j=0;j<3;j++){
-        if(i==j) continue;
-        while(nodes[i].size() > target[i] && nodes[j].size() < target[j]){
-          //found one, move one here
-          Node removed = nodes[i].remove(0);
-          //update target, color and add it to new list
-          removed.setTarget(dc[j].loc);
-          removed.nodeColor = dc[j].dcOutlineColor;
-          nodes[j].add(removed);
-          moved = true;
-        }
-      }
       //if we never moved any, then delete the nodes.
       if(!moved){
         while(nodes[i].size() > target[i]){
@@ -148,6 +146,16 @@ void mousePressed(){
       data[i][j-1] = Float.parseFloat(numbers[i]);
     }
   }
+}
+
+void keyPressed(){
+  if( key == 'h'){
+    easterEgg = true;
+    r = 0;
+  }
+}
+
+void keyReleased(){
 }
 
 void setupControls(){
