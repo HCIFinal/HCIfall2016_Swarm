@@ -38,15 +38,15 @@ class Time{
   public String nextSpeed(){
    if(framesPerTick==15){
    speed2x();
-   return "2x";
+   return "Speed: 2x";
    }
    else if (framesPerTick==7){
     speed4x(); 
-    return"4x";
+    return"Speed: 4x";
    }
    else{
     speed1x(); 
-    return"1x";
+    return"Speed: 1x";
    }
   }
   

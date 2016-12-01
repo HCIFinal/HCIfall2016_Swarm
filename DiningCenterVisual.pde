@@ -14,9 +14,6 @@ private boolean showNumbers = true;
 private Button pauseButton;
 private Button speedButton;
 
-boolean easterEgg = false;
-float r = 0;
-
 void setup(){
   size(900,900);
   //read text file for daily data
@@ -51,17 +48,6 @@ void draw(){
   //draw the background slightly opaque
   fill(0, 30);
   
-  if(easterEgg){
-    translate(width/2, height/2);
-    rotate( r += .05);
-    translate(-width/2, -height/2);
-    fill(0, 255);
-    if(r > TWO_PI){
-      r = 0;
-      easterEgg = false;
-    }
-  }
-  
   noStroke();
   rectMode(CORNER);
   rect(0, 0, width, height);
@@ -94,6 +80,12 @@ void draw(){
   
   pauseButton.render();
   speedButton.render();
+  
+  //draw the legend
+  fill(255);
+  textAlign(RIGHT, BOTTOM);
+  textSize(28);
+  text("1 node represents " + peoplePerNode + " People", width-25, height-25);
 }
 
 void balanceArrays(float l1, float l2, float l3){
@@ -122,7 +114,7 @@ void balanceArrays(float l1, float l2, float l3){
   //after balancing, see if we need to add any more nodes to the display.
   for(int i=0;i<3;i++){
     while(nodes[i].size() < target[i]){
-      Node n = new Node(dc[i].loc.x - dc[i].dcDiameter/2 + random(dc[i].dcDiameter), dc[i].loc.y - dc[i].dcDiameter/2 + random(dc[i].dcDiameter));
+      Node n = new Node(dc[i].loc.x - dc[i].dcDiameter/2 + random(dc[i].dcDiameter*.8), dc[i].loc.y - dc[i].dcDiameter/2 + random(dc[i].dcDiameter*.8), random(-2,2), random(-2,2));
       n.setTarget(dc[i].loc);
       n.nodeColor = dc[i].dcOutlineColor;
       nodes[i].add(n);
@@ -149,17 +141,14 @@ void mousePressed(){
 }
 
 void keyPressed(){
-  if( key == 'h'){
-    easterEgg = true;
-    r = 0;
-  }
+  
 }
 
 void keyReleased(){
 }
 
 void setupControls(){
-  pauseButton = new Button(width-120-10,10,120,50, "Pause", new Action(){
+  pauseButton = new Button(width-170-10,10,170,50, "Pause", new Action(){
   
     public void execute(){
       if(time.isPaused()){
@@ -172,7 +161,7 @@ void setupControls(){
       }
     }
   });
-  speedButton = new Button(width-120-10,70,120,50,"1x", new Action(){
+  speedButton = new Button(width-170-10,70,170,50,"Speed: 1x", new Action(){
     public void execute(){
       speedButton.setText(time.nextSpeed());
     }

@@ -1,5 +1,4 @@
 class Button{
-  
   public int bTextSize = 32;
   public int bRadius = 13;
   
