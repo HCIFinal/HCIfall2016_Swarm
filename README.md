@@ -4,8 +4,7 @@
                                                                            
 *******************************************************************************
 |                                                                             |
-| Dining Center Visualization is currently available for NDSU Campus.
-| 						                                                                |
+| Dining Center Visualization is currently available for NDSU Campus.         |
 |                                                                             |
 |-----------------------------------------------------------------------------|
 
