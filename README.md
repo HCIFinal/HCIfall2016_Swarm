@@ -3,10 +3,7 @@
             Dining Center Visualization v.0.1           
                                                                            
 *******************************************************************************
-|                                                                             |
-| Dining Center Visualization is currently available for NDSU Campus.         |
-|                                                                             |
-|-----------------------------------------------------------------------------|
+Dining Center Visualization is currently available for NDSU Campus.    
 
 Follow the easy to use visualization as a means of observing traffic flow in 
 the NDSU Dining Services. You have the ability of navigating to a certain time,
