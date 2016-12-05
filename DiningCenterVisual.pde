@@ -16,6 +16,7 @@ private Button speedButton;
 
 void setup(){
   size(900,900);
+  //fullScreen();
   //read text file for daily data
   String[] lines = loadStrings("times.txt");
   for(int j=0;j<lines.length;j++){
@@ -114,7 +115,7 @@ void balanceArrays(float l1, float l2, float l3){
   //after balancing, see if we need to add any more nodes to the display.
   for(int i=0;i<3;i++){
     while(nodes[i].size() < target[i]){
-      Node n = new Node(dc[i].loc.x - dc[i].dcDiameter/2 + random(dc[i].dcDiameter*.8), dc[i].loc.y - dc[i].dcDiameter/2 + random(dc[i].dcDiameter*.8), random(-2,2), random(-2,2));
+      Node n = new Node(dc[i].loc.x - dc[i].dcDiameter/2 + dc[i].dcDiameter*.1 + random(dc[i].dcDiameter*.8), dc[i].loc.y - dc[i].dcDiameter/2 + dc[i].dcDiameter*.1 + random(dc[i].dcDiameter*.8), random(-2,2), random(-2,2));
       n.setTarget(dc[i].loc);
       n.nodeColor = dc[i].dcOutlineColor;
       nodes[i].add(n);
